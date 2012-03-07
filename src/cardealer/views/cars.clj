@@ -3,4 +3,4 @@
         [noir.response :only [json]]))
 
 (defpage "/cars" []
-  (json [{:licenceNumber "XYZ-123"}]))
+  (json [{:model "Honda" :licenceNumber "XYZ-123" :price "100.0"}]))

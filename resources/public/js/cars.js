@@ -8,17 +8,20 @@ $(function() {
 		el: $("#cars-table"),
 
 		initialize: function() {
-			this.cars = new CarsCollection;
-			this.cars.on("reset", this.resetView, this);
-			this.cars.fetch();
+			this.collection.on("reset", this.resetView, this);
 		},
 
 		resetView: function() {
-			this.cars.each(this.addCar);
+			this.collection.each(this.addCar, this);
 		},
 
 		addCar: function(car) {
-			$("tbody", this.el).append("<tr></tr>");
+			this.$el.dataTable().fnAddData(
+				[car.get("model"),car.get("licenceNumber"),car.get("price")]);
+		},
+
+		render: function() {
+			this.$el.dataTable({sDom: "ftlp"});
 		}
 	});
 });
