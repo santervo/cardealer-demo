@@ -8,19 +8,37 @@
 	<script type="text/javascript" src="/vendor/jquery-dataTables/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" src="/vendor/underscore-min.js"></script>
 	<script type="text/javascript" src="/vendor/backbone-min.js"></script>
+	<script type="text/javascript" src="/vendor/backbone.modelbinding.min.js"></script>
 	<script type="text/javascript" src="/js/cars.js"></script>
 	<script type="text/javascript" src="/js/initialize.js"></script>
 </head>
 <body>
 	<h1>CarDealer</h1>
-	<table id="cars-table">
-		<thead>
-			<tr>
-				<th>Model</th>
-				<th>Licence number </th>
-				<th>Price</th>
-			</tr>
-		</thead>
-	</table>
+	<div id="cars-view">
+		<a href="#" id="add-car-link">Add new car</a>
+		<table id="cars-table">
+			<thead>
+				<tr>
+					<th>Model</th>
+					<th>Licence number </th>
+					<th>Price</th>
+				</tr>
+			</thead>
+		</table>
+		<script id="car-form-template" type="text/template">
+			<div>
+				<label>Model:</label>
+				<input type="text" id="model"/>
+			</div>
+			<div>
+				<label>Licence number:</label>
+				<input type="text" id="licenceNumber"/>
+			</div>
+			<div>
+				<label>Price:</label>
+				<input type="text" id="price"/>
+			</div>
+		</script>	
+	</div>
 </body>
 </html>
