@@ -2,4 +2,8 @@
   (:use somnium.congomongo))
 
 (defn save-car [car]
-  (insert! :cars car))
+  (if (:_id car)
+    (do
+      (update! :cars {:_id (:_id car)} car)
+      car)
+    (insert! :cars car)))
