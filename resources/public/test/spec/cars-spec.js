@@ -64,4 +64,25 @@ describe("CarsCollection", function() {
 	});
 });
 
+describe("Car", function() {
+	beforeEach(function() {
+		this.car = new Car;
+	});
 
+	it("should have correct url", function() {
+		expect(this.car.url()).toEqual("/cars");
+	})
+
+	describe("after save", function() {
+		beforeEach(function() {
+			this.server = sinon.fakeServer.create();
+			this.server.respondWith("POST", "/cars", jsonResponse({"_id": "testid"}));
+			this.car.save();
+			this.server.respond();
+		});
+
+		it("should have correct url", function() {
+			expect(this.car.url()).toEqual("/cars/testid");
+		});
+	});
+});

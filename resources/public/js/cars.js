@@ -1,6 +1,7 @@
 $(function() {
 
 	window.Car = Backbone.Model.extend({
+		idAttribute: "_id",
 		urlRoot: "/cars"
 	});
 
