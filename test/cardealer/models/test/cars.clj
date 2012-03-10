@@ -17,3 +17,9 @@
       (let [car (assoc car :model "Toyota")
             car (save-car car)]
         (is (= car (fetch-one :cars :where {:_id (:_id car)})))))))
+
+(deftest test-find-cars
+  (do
+    (destroy! :cars {})
+    (mass-insert! :cars [{:model "Honda"} {:model "Toyota"}])
+    (is (= 2 (count (find-cars))))))
