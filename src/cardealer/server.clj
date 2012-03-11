@@ -1,11 +1,9 @@
 (ns cardealer.server
-  (:require [noir.server :as server]))
+  (:use ring.adapter.jetty ring.middleware.reload)
+  (:use cardealer.app))
 
-(server/load-views "src/cardealer/views/")
+(def dev-handler (wrap-reload #'app))
 
 (defn -main [& m]
-  (let [mode (keyword (or (first m) :dev))
-        port (Integer. (get (System/getenv) "PORT" "8080"))]
-    (server/start port {:mode mode
-                        :ns 'cardealer})))
+  (run-jetty #'dev-handler {:port 8080}))
 

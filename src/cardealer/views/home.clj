@@ -1,6 +1,7 @@
 (ns cardealer.views.home
-  (:use [noir.core :only [defpage]]))
+  (:use compojure.core))
 
-(defpage "/" []
-  (slurp "resources/public/index.html"))
+(defroutes main-routes
+  (GET "/" []
+    (slurp "resources/public/index.html")))
 
