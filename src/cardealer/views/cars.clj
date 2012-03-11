@@ -1,10 +1,22 @@
 (ns cardealer.views.cars
-  (:use cardealer.models.cars)
   (:use compojure.core)
+  (:use somnium.congomongo)
+  (:use ring.util.response)
   (:use clojure.data.json))
 
+(defn json-response [data]
+  (-> (response (json-str data)) (content-type "application/json")))
+
+(defn id-to-str [data]
+  (update-in data [:_id] str))
+
 (defroutes car-routes
-  (GET "/cars" [] (json-str (find-cars)))
+  (GET "/cars" []
+    (json-response
+      (map id-to-str (fetch :cars))))
 
   (POST "/cars" {car :json-params}
-        (json-str (save-car car))))
+    (json-response
+      (-> (insert! :cars car)
+        (id-to-str)
+        (select-keys [:_id])))))

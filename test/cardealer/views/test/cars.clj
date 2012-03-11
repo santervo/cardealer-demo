@@ -3,23 +3,32 @@
   (:use cardealer.models.cars)
   (:use clojure.data.json)
   (:use ring.mock.request)
+  (:use somnium.congomongo)
   (:use clojure.test))
 
-(defn mock-find-cars []
-  [{:model "Honda"} {:model "Toyota"}])
+(def initial-cars [{:model "Honda"} {:model "Toyota"}])
 
-(defn mock-save-car [car]
-  (assoc car :_id 100))
+(def test-conn (make-connection "cardealer-test" :host "127.0.0.1"))
+
+(defn insert-test-data []
+  (with-mongo test-conn
+    (destroy! :cars {})
+    (mass-insert! :cars initial-cars)))
+
+(defn test-app [request]
+  (insert-test-data)
+  (with-redefs [conn test-conn]
+    (#'app request)))
 
 (deftest test-get-cars
-  (with-redefs [find-cars mock-find-cars]
-    (let [result (#'app (request :get "/cars"))]
-        (is (= (find-cars) (read-json (:body result)))))))
+  (let [result (#'test-app (request :get "/cars"))
+        cars (read-json (:body result))]
+    (is (= ["Honda" "Toyota"] (map :model cars)) "Returns correct cars")))
 
 (deftest test-post-car
-  (with-redefs [save-car mock-save-car]
-    (let [request (-> (request :post "/cars") 
-                    (body (json-str {:model "Rolls-Royce"}))
-                    (content-type "application/json"))
-          result (#'app request)]
-      (is (= {:model "Rolls-Royce" :_id 100} (read-json (:body result)))))))
+  (let [request (-> (request :post "/cars") 
+                  (body (json-str {:model "Citroen"}))
+                  (content-type "application/json"))
+          result (#'test-app request)
+          car (read-json (:body result))]
+    (is (:_id car) "Returns id for car")))
