@@ -1,3 +1,7 @@
 input.error {
 	background-color: #FFA0A0;
 }
+
+#app-view {
+	padding-bottom: 30px !important;
+}

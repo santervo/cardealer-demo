@@ -145,6 +145,7 @@ $(function() {
 		},
 
 		render: function() {
+			this.$el.tabs();
 			this.carsView.render();
 		}
 	});
