@@ -136,4 +136,17 @@ $(function() {
 			view.render();
 		}
 	});
+
+	window.CarDealerAppView = Backbone.View.extend({
+		el: $("#app-view"),
+
+		initialize: function() {
+			this.carsView = new CarsView;
+		},
+
+		render: function() {
+			this.carsView.render();
+		}
+	});
+
 });

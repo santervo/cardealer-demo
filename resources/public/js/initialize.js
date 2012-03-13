@@ -1,4 +1,4 @@
 $(function() {
-	var carsView = new CarsView;
-	carsView.render();
+	var appView = new CarDealerAppView;
+	appView.render();
 });
