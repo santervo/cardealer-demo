@@ -66,23 +66,46 @@ describe("CarsCollection", function() {
 
 describe("Car", function() {
 	beforeEach(function() {
+		this.errorHandler = sinon.spy();
 		this.car = new Car;
+		this.car.on("error", this.errorHandler);
 	});
 
-	it("should have correct url", function() {
-		expect(this.car.url()).toEqual("/cars");
-	})
-
-	describe("after save", function() {
-		beforeEach(function() {
-			this.server = sinon.fakeServer.create();
-			this.server.respondWith("POST", "/cars", jsonResponse({"_id": "testid"}));
-			this.car.save();
-			this.server.respond();
+	describe("initially", function() {
+		it("should have correct idAttribute", function() {
+			expect(this.car.idAttribute).toEqual("_id");
 		});
 
 		it("should have correct url", function() {
-			expect(this.car.url()).toEqual("/cars/testid");
+			expect(this.car.url()).toEqual("/cars");
+		});
+	});
+
+	describe("with valid values", function() {
+		beforeEach(function() {
+			this.car.set({
+				model: "Honda",
+				licenceNumber: "XYZ-123",
+				price: "10000"
+			});
+		});
+
+		it("should not raise error", function() {
+			expect(this.errorHandler.called).toBeFalsy();
+		});
+	});
+
+	describe("with empty values", function() {
+		beforeEach(function() {
+			this.car.set({
+				model: "",
+				licenceNumber: "",
+				price: ""
+			});
+		});
+
+		it("should raise error", function() {
+			expect(this.errorHandler.args[0][1]).toEqual(["model","licenceNumber","price"]);
 		});
 	});
 });
