@@ -28,6 +28,22 @@ $(function() {
 
 	});
 
+	window.CarsTableItemView = Backbone.View.extend({
+		render: function() {
+			var idx = this.options.dataTable.fnAddData([
+				this.model.get("model"), 
+				this.model.get("licenceNumber"),
+				this.model.get("price"),
+				'<a class="make-deal-link action" href="#">Make a deal</a>']);
+			var row = this.options.dataTable.fnGetNodes(idx);
+			$("a.make-deal-link", row).click($.proxy(this, "makeDeal"));
+		},
+
+		makeDeal: function() {
+			// implement
+		}
+	});
+
 	window.CarsTableView = Backbone.View.extend({
 		el: $("#cars-table"),
 
@@ -41,12 +57,17 @@ $(function() {
 		},
 
 		addCar: function(car) {
-			this.$el.dataTable().fnAddData(
-				[car.get("model"),car.get("licenceNumber"),car.get("price")]);
+			var itemView = new CarsTableItemView({
+				model: car,
+				dataTable: this.$el.dataTable()
+			});
+			itemView.render();
 		},
 
 		render: function() {
-			this.$el.dataTable({sDom: "ftlp"});
+			this.$el.dataTable({sDom: "ftlp", aoColumnDefs: [ 
+			      { sWidth: "90px", "aTargets": [ 3 ] }
+			    ]});
 		}
 	});
 

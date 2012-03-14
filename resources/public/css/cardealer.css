@@ -5,3 +5,7 @@ input.error {
 #app-view {
 	padding-bottom: 30px !important;
 }
+
+a.action {
+	color: blue;	
+}
