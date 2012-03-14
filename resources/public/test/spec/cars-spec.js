@@ -24,27 +24,6 @@ describe("CarsTableView", function() {
 		this.view.$el.dataTable.verify();
 	});
 
-	it("should add cars to dataTable on collection reset", function() {
-		var fnAddData = sinon.spy();
-		var dataTable = {fnAddData: fnAddData};
-		this.view.$el.dataTable = function() { return dataTable; };
-
-		this.cars.reset(cars);
-
-		sinon.assert.calledWith(fnAddData, [cars[0].model, cars[0].licenceNumber, cars[0].price]);
-		sinon.assert.calledWith(fnAddData, [cars[1].model, cars[1].licenceNumber, cars[1].price]);
-	});
-
-	it("should add car to dataTable whe car is added to collection", function() {
-		var fnAddData = sinon.spy();
-		var dataTable = {fnAddData: fnAddData};
-		this.view.$el.dataTable = function() { return dataTable; };
-
-		var car = {model: "FooBar", licenceNumber: "FOO-100", price: "100.0"};
-		this.cars.add(car);
-
-		sinon.assert.calledWith(fnAddData, [car.model, car.licenceNumber, car.price]);
-	});
 });
 
 describe("CarsCollection", function() {
