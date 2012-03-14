@@ -158,16 +158,38 @@ $(function() {
 		}
 	});
 
+	window.DealsTableView = Backbone.View.extend({
+		el: $("#deals-table"),
+
+		render: function() {
+			this.$el.dataTable({sDom: "ftlp"});
+		}
+	}),
+
+	window.DealsView = Backbone.View.extend({
+		el: $("#deals-view"),
+
+		initialize: function() {
+			this.dealsTableView = new DealsTableView;
+		},
+
+		render: function() {
+			this.dealsTableView.render();
+		}
+	}),
+
 	window.CarDealerAppView = Backbone.View.extend({
 		el: $("#app-view"),
 
 		initialize: function() {
 			this.carsView = new CarsView;
+			this.dealsView = new DealsView;
 		},
 
 		render: function() {
 			this.$el.tabs();
 			this.carsView.render();
+			this.dealsView.render();
 		}
 	});
 
