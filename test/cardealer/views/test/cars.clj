@@ -21,14 +21,18 @@
     (#'app request)))
 
 (deftest test-get-cars
-  (let [result (#'test-app (request :get "/cars"))
-        cars (read-json (:body result))]
-    (is (= ["Honda" "Toyota"] (map :model cars)) "Returns correct cars")))
+  (testing "should return all cars"
+    (let [result (#'test-app (request :get "/cars"))
+          cars (read-json (:body result))]
+      (is (= ["Honda" "Toyota"] (map :model cars))))))
 
 (deftest test-post-car
-  (let [request (-> (request :post "/cars") 
-                  (body (json-str {:model "Citroen"}))
-                  (content-type "application/json"))
-          result (#'test-app request)
-          car (read-json (:body result))]
-    (is (:_id car) "Returns id for car")))
+  (testing "should insert car to database"
+    (let [request (-> (request :post "/cars") 
+                    (body (json-str {:model "Citroen"}))
+                    (content-type "application/json"))
+            result (#'test-app request)
+            car (read-json (:body result))]
+      (with-mongo test-conn
+        (is (:_id car) "returns id")
+        (is (fetch-by-id :cars (object-id (:_id car))))))))
