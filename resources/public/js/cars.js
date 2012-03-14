@@ -83,30 +83,30 @@ $(function() {
 				width: 300,
 				close: $.proxy(this, "close"),
 				buttons: {
-					"Tallenna": $.proxy(this, "saveButtonPushed")
+					"Tallenna": $.proxy(this, "saveCar")
 				}
 			};
 		},
 
-		saveButtonPushed: function() {
+		saveCar: function() {
 			var attrs = {
 				model: $("#model").val(),
 				licenceNumber: $("#licenceNumber").val(),
 				price: $("#price").val()
 			};
 			var opts = {
-				success: $.proxy(this, "success"),
-				error: $.proxy(this, "failed")
+				success: $.proxy(this, "savingSucceeded"),
+				error: $.proxy(this, "savingFailed")
 			};
 			this.model.save(attrs, opts);
 		},
 
-		success: function() {
+		savingSucceeded: function() {
 			this.collection.add(this.model);
 			this.close();
 		},
 
-		failed: function(car, failedFields) {
+		savingFailed: function(car, failedFields) {
 			var fields = ["model", "licenceNumber", "price"];
 			_.chain(fields).difference(failedFields).each(this.removeErrorClass, this).value();
 			_(failedFields).each(this.addErrorClass, this);
