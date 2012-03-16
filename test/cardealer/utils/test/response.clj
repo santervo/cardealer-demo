@@ -9,3 +9,7 @@
     (is (= 200 (:status response)))
     (is (= "application/json" (get-in response [:headers "Content-Type"])))
     (is (= (json-str body) (:body response)))))
+
+(deftest test-api-error
+  (let [response (error-response {})]
+    (is (= 400 (:status response)))))
