@@ -88,6 +88,17 @@ $(function() {
 			};
 		},
 
+		render: function() {
+			$(document.body).append(this.el);
+			this.$el.html(carFormTemplate());
+			this.$el.dialog(this.dialogOpts);
+		},
+
+		close: function() {
+			this.$el.dialog("destroy");
+			this.remove();
+		},
+
 		saveCar: function() {
 			var attrs = {
 				model: $("#model").val(),
@@ -120,17 +131,6 @@ $(function() {
 		removeErrorClass: function(fieldId) {
 			var field = $("#" + fieldId, this.$el);
 			field.removeClass("error");
-		},
-
-		render: function() {
-			$(document.body).append(this.el);
-			this.$el.html(carFormTemplate());
-			this.$el.dialog(this.dialogOpts);
-		},
-
-		close: function() {
-			this.$el.dialog("destroy");
-			this.remove();
 		},
 	});
 
