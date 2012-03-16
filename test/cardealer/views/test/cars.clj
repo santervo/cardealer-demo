@@ -5,8 +5,8 @@
   (:use somnium.congomongo)
   (:use clojure.test))
 
-(def initial-cars [{"model" "Honda" "licenceNumber" "XYZ-123" "price" "5000"}
-                   {"model" "Toyota" "licenceNumber" "ABC-100" "price" "9000"}])
+(def initial-cars [{:model "Honda" :licenceNumber "XYZ-123" :price "5000"}
+                   {:model "Toyota" :licenceNumber "ABC-100" :price "9000"}])
 
 (def test-conn (make-connection "cardealer-test" :host "127.0.0.1"))
 
@@ -29,7 +29,7 @@
 (deftest test-post-car
   (testing "should insert car to database"
     (let [request (-> (request :post "/cars") 
-                    (body (json-str {"model" "Citroen" "licenceNumber" "CDE-200" "price" "15000"}))
+                    (body (json-str {:model "Citroen" :licenceNumber "CDE-200" :price "15000"}))
                     (content-type "application/json"))
             result (#'test-app request)
             car (read-json (:body result))]

@@ -1,8 +1,7 @@
 (ns cardealer.app
   (:use cardealer.views.home cardealer.views.cars)
   (:use compojure.core compojure.handler compojure.route)
-  (:use somnium.congomongo)
-  (:use ring.middleware.json-params))
+  (:use somnium.congomongo))
 
 (def conn (make-connection "cardealer" :host "127.0.0.1"))
 
@@ -18,5 +17,4 @@
 
 (def app
   (with-mongodb
-    (wrap-json-params
-      (api app-routes))))
+    (api app-routes)))

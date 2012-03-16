@@ -1,6 +1,7 @@
 (ns cardealer.views.cars
   (:use compojure.core)
   (:use somnium.congomongo)
+  (:use clojure.data.json)
   (:use cardealer.utils.response))
 
 (defn id-to-str [data]
@@ -14,8 +15,9 @@
     (json-response
       (map id-to-str (fetch :cars))))
 
-  (POST "/cars" {car :json-params}
-    (let [car (update-in car ["price"] money)]
+  (POST "/cars" {car :body}
+    (let [car (read-json (slurp car))
+          car (update-in car [:price] money)]
       (json-response
         (-> (insert! :cars car)
           (id-to-str)
