@@ -1,11 +1,7 @@
 (ns cardealer.views.cars
   (:use compojure.core)
   (:use somnium.congomongo)
-  (:use ring.util.response)
-  (:use clojure.data.json))
-
-(defn json-response [data]
-  (-> (response (json-str data)) (content-type "application/json")))
+  (:use cardealer.utils.response))
 
 (defn id-to-str [data]
   (update-in data [:_id] str))
