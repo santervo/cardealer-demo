@@ -15,9 +15,8 @@
     (json-response
       (map id-to-str (fetch :cars))))
 
-  (POST "/cars" {car :body}
-    (let [car (read-json (slurp car))
-          car (update-in car [:price] money)]
+  (POST "/cars" {json :body}
+    (let [car (-> json slurp read-json)]
       (json-response
         (-> (insert! :cars car)
           (id-to-str)
