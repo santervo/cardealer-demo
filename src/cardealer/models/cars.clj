@@ -2,8 +2,10 @@
   (:use cardealer.utils.validation))
 
 (defn validate-car [car]
-  (-> {}
-    (required car :model "Model is required")
-    (required car :licenceNumber "Licence number is required")
-    (required car :price "Price is required")))
+  (validate car
+    (required :model "Model is required")
+    (validate-field :licenceNumber
+      (required "Licence number is required")
+      (pattern #"^[a-zA-ZåäöÅÄÖ]{1,3}-\d{1,3}$" "Licence number is not valid"))
+    (required :price "Price is required")))
 
