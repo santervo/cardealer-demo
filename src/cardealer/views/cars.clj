@@ -1,5 +1,4 @@
 (ns cardealer.views.cars
-  (:import [org.joda.money Money CurrencyUnit])
   (:use compojure.core)
   (:use somnium.congomongo)
   (:use ring.util.response)
