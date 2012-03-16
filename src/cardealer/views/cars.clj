@@ -1,4 +1,5 @@
 (ns cardealer.views.cars
+  (:import [org.joda.money Money CurrencyUnit])
   (:use compojure.core)
   (:use somnium.congomongo)
   (:use ring.util.response)
@@ -10,13 +11,17 @@
 (defn id-to-str [data]
   (update-in data [:_id] str))
 
+(defn money [amount]
+  (str (.setScale (bigdec amount) 2)))
+
 (defroutes car-routes
   (GET "/cars" []
     (json-response
       (map id-to-str (fetch :cars))))
 
   (POST "/cars" {car :json-params}
-    (json-response
-      (-> (insert! :cars car)
-        (id-to-str)
-        (select-keys [:_id])))))
+    (let [car (update-in car ["price"] money)]
+      (json-response
+        (-> (insert! :cars car)
+          (id-to-str)
+          (select-keys [:_id]))))))
