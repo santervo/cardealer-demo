@@ -1,4 +1,5 @@
 (ns cardealer.views.cars
+  (:use cardealer.models.cars)
   (:use compojure.core)
   (:use somnium.congomongo)
   (:use clojure.data.json)
@@ -18,6 +19,5 @@
   (POST "/cars" {json :body}
     (let [car (-> json slurp read-json)]
       (json-response
-        (-> (insert! :cars car)
-          (id-to-str)
-          (select-keys [:_id]))))))
+        (post-car car)))))
+
