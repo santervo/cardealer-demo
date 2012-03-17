@@ -2,7 +2,7 @@
   (:require [somnium.congomongo :as mongo])
   (:use cardealer.utils.validation))
 
-(defn cars-post [car]
+(defn post-car [car]
   (mongo/insert! :cars car))
 
 (defn validate-car [car]

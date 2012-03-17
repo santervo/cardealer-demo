@@ -7,9 +7,9 @@
 
 (mongo/set-connection! conn)
 
-(deftest test-cars-post
+(deftest test-post-car
   (let [car {:model "Honda" :licenceNumber "XYZ-123" :price "1000.00"}
-        car (cars-post car)]
+        car (post-car car)]
     (is (:_id car) "should assign _id")
     (is (mongo/fetch-by-id :cars (:_id car)))))
 
