@@ -3,6 +3,7 @@
   (:use compojure.core)
   (:use somnium.congomongo)
   (:use clojure.data.json)
+  (:use [ring.util.response :only [status]])
   (:use cardealer.utils.response))
 
 (defn id-to-str [data]
@@ -17,7 +18,9 @@
       (map id-to-str (fetch :cars))))
 
   (POST "/cars" {json :body}
-    (let [car (-> json slurp read-json)]
-      (json-response
-        (post-car car)))))
+    (let [car (-> json slurp read-json)
+          errors (validate-car car)]
+      (if (empty? errors)
+        (-> car post-car id-to-str json-str)
+        (-> (json-response errors) (status 400))))))
 
