@@ -5,13 +5,13 @@
 
 (def conn (mongo/make-connection "cardealer-test" :host "127.0.0.1"))
 
-(mongo/set-connection! conn)
 
 (deftest test-post-car
-  (let [car {:model "Honda" :licenceNumber "XYZ-123" :price "1000.00"}
-        car (post-car car)]
-    (is (:_id car) "should assign _id")
-    (is (mongo/fetch-by-id :cars (:_id car)))))
+  (mongo/with-mongo conn
+    (let [car {:model "Honda" :licenceNumber "XYZ-123" :price "1000.00"}
+          car (post-car car)]
+      (is (:_id car) "should assign _id")
+      (is (mongo/fetch-by-id :cars (:_id car))))))
 
 (deftest test-validate-car
   (testing "valid cars"
