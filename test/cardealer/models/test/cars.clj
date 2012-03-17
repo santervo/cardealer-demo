@@ -1,6 +1,17 @@
 (ns cardealer.models.test.cars
   (:use cardealer.models.cars :reload-all)
+  (:require [somnium.congomongo :as mongo])
   (:use clojure.test))
+
+(def conn (mongo/make-connection "cardealer-test" :host "127.0.0.1"))
+
+(mongo/set-connection! conn)
+
+(deftest test-cars-post
+  (let [car {:model "Honda" :licenceNumber "XYZ-123" :price "1000.00"}
+        car (cars-post car)]
+    (is (:_id car) "should assign _id")
+    (is (mongo/fetch-by-id :cars (:_id car)))))
 
 (deftest test-validate-car
   (testing "valid cars"
@@ -32,3 +43,4 @@
            (validate-car {:model "Tata" :licenceNumber "XYZ-123" :price "."})))
      (is (= {:price "Price is not valid"}
            (validate-car {:model "Tata" :licenceNumber "XYZ-123" :price "100K"})))))
+
