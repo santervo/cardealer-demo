@@ -5,7 +5,6 @@
 
 (def conn (mongo/make-connection "cardealer-test" :host "127.0.0.1"))
 
-
 (deftest test-post-car
   (mongo/with-mongo conn
     (let [car {:model "Honda" :licenceNumber "XYZ-123" :price "1000.00"}

@@ -8,17 +8,6 @@ $(function() {
 		idAttribute: "_id",
 
 		urlRoot: "/cars",
-		
-		//TODO: validate on server side
-		validate: function(attrs) {
-			this.invalid = [];
-
-			if (!attrs.model) this.invalid.push("model");
-			if (!validLicenceNumber.test(attrs.licenceNumber)) this.invalid.push("licenceNumber");
-			if (!validNumber.test(attrs.price)) this.invalid.push("price");
-
-			return this.invalid.length > 0 ? this.invalid : undefined;
-		},
 	});
 
 	window.CarsCollection = Backbone.Collection.extend({
@@ -112,12 +101,14 @@ $(function() {
 			this.model.save(attrs, opts);
 		},
 
-		savingSucceeded: function() {
+		savingSucceeded: function(model, response) {
 			this.collection.add(this.model);
 			this.close();
 		},
 
-		savingFailed: function(car, failedFields) {
+		savingFailed: function(model, response) {
+			var errors = JSON.parse(response.responseText);
+			var failedFields = _.keys(errors);
 			var fields = ["model", "licenceNumber", "price"];
 			_.chain(fields).difference(failedFields).each(this.removeErrorClass, this).value();
 			_(failedFields).each(this.addErrorClass, this);
