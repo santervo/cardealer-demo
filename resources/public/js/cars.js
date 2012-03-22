@@ -1,9 +1,5 @@
 $(function() {
 
-	var validLicenceNumber = /^[A-Za-zöäåÖÄÅ]{1,3}-\d{1,3}$/;
-
-	var validNumber = /^-?\d+(\.\d+)?$/
-
 	window.Car = Backbone.Model.extend({
 		idAttribute: "_id",
 
