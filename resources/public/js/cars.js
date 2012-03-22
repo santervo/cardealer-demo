@@ -107,21 +107,15 @@ $(function() {
 		},
 
 		savingFailed: function(model, response) {
-			var errors = JSON.parse(response.responseText);
-			var failedFields = _.keys(errors);
-			var fields = ["model", "licenceNumber", "price"];
-			_.chain(fields).difference(failedFields).each(this.removeErrorClass, this).value();
-			_(failedFields).each(this.addErrorClass, this);
+			var errorMap = JSON.parse(response.responseText);
+			this.setFormErrors(_.keys(errorMap));
 		},
 
-		addErrorClass: function(fieldId) {
-			var field = $("#" + fieldId, this.$el);
-			field.addClass("error");
-		},
-
-		removeErrorClass: function(fieldId) {
-			var field = $("#" + fieldId, this.$el);
-			field.removeClass("error");
+		setFormErrors: function(failedFields) {
+			$("input", this.$el).removeClass("error");
+			_(failedFields).each(function(id) {
+				$("#"+id).addClass("error");
+			});
 		},
 	});
 
